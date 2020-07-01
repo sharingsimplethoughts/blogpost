@@ -1,0 +1,190 @@
+
+{% load staticfiles %}
+
+{% include 'admin_panel/header.html' %}
+
+<style>
+
+    .view-icon a {
+    text-decoration: none;
+    color: #000;
+    }
+    .text-form textarea::placeholder{
+    color: #000;
+    }
+    .link{
+    color: #33b5b5;
+    }
+
+    .inactive{
+color:#2c3e50 !important;
+
+}
+.view-image img{
+  width:100%;
+  min-height: 100%;
+  height: auto;
+}
+.view-image{
+  height: 200px;
+  overflow: hidden;
+}
+.post-image .item{
+  width: 20%;
+}
+.user_res {
+
+  margin-top: 10px; 
+
+}
+
+
+  .size-inventory .col-md-3{
+    border-right: 1px solid #d4d4d4db;
+    margin-top: 10px;
+  }
+  .product-images{
+    width: 100% !important;
+  }
+  .product-images img{
+    width: 100%;
+    height: auto;
+  }
+
+  .product-details{
+    width: 60% !important;
+    position: relative;
+  }
+  .product-attributes{
+    border-bottom: 1px dotted #2c3e50;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .edel-btns{
+    position: absolute;
+    right: 30px;
+    top: 13px;
+  }
+  .flexslider .slides img{
+    height: 200px;
+    width: auto;
+    margin: auto;
+  }
+  ol.flex-control-thumbs{
+    display: flex;
+    justify-content: center;
+  }
+  ol.flex-control-thumbs li {
+    width: 10%;
+    border-left: 1px solid #687d92;
+    border-top: 1px solid #687d92;
+    border-bottom: 1px solid #687d92;
+    border-right: 1px solid #687d92;
+    padding: 2px;
+  }
+
+
+
+
+</style>
+    <div class="userPosts">
+        <div class="layout-content">
+            <div class="layout-content-body">
+                 <div class="title-bar">
+                    <h4>
+                      <ul class="breadcrumb">
+                        <li><i class="fa fa-home "></i><a class ="inactive" href="/admin/panel/home/"> Home</a></li>
+                          <li ><a class="inactive" href="/admin/panel/post_management">Post Management</a></li>
+                          <li ><a class="inactive" href="/admin/panel/user_posts/{{post.created_by.id}}">View Post</a></li>
+                          <li class="active">{{post.get_post_type_display}} Post detail</li>
+                      </ul>
+                    </h4>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-body text-form">
+                              <div class="row">
+                                    <div class="col-md-offset-3 col-md-6">
+                                      <div class="form-group">
+                                      <label for="" class="control-label">
+                                      About</label>
+                                      <textarea class="form-control" name="about" rows="3" readonly="" placeholder=" ">{{post.about}}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="" class="control-label">
+                                      Description</label>
+                                      <textarea class="form-control" name="about" rows="3" readonly="" placeholder="">{{post.description}}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="custom-control custom-control-primary custom-checkbox">
+                                    {% if post.is_18_plus %}
+                                      <input class="custom-control-input" type="checkbox"  name="mode" onclick="return false;" checked="checked">
+                                     {% else %}
+                                   <input class="custom-control-input" type="checkbox"  name="mode">
+                                    {% endif %}
+                                      <span class="custom-control-indicator"></span>
+                                      <span class="custom-control-label">Allowed for 18+</span>
+                                    </label>
+                                    </div>
+                                    </div>
+                                  </div>
+<!--                                {% for image in images %}-->
+<!--                                     <div class="row post-image">-->
+<!--                                        <div class="item col-md-2">-->
+<!--                                          <div class="view-image">-->
+<!--                                          <img src="{{image.file.url}}">-->
+<!--                                        </div>-->
+<!--                                      </div>-->
+<!--                                {% endfor %}-->
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-6">
+                                  <div class="product-images" >
+                                    <div class="flexslider">
+                                      <ul class="slides">
+
+                                        {% for img in medias %}
+
+                                        <li data-thumb = "{{img.file.url}}" style="margin-top: 10px">
+                                            <img src = "{{img.file.url}}" alt="">
+                                        </li>
+
+                                        {% endfor %}
+
+                                      </ul>
+                                    </div>
+                                  </div>
+                                    </div>
+                                </div>
+                                  <div class="row " >
+                                   <div class="col-md-offset-3 col-md-6">
+                                   
+                                    <div class="row user_res">
+                                      <div class="col-md-4">
+                                      <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-eye"></i> {{post.total_views}}</a>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-comment"></i> {{post.total_comments}}</a>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-glass"></i> {{post.total_shares}}</a>
+                                      </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% include 'admin_panel/footer.html' %}

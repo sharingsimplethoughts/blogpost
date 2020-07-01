@@ -1,0 +1,104 @@
+
+{% load staticfiles %}
+
+{% include 'admin_panel/header.html' %}
+
+
+<style type="text/css">
+
+    .view-icon a {
+    text-decoration: none;
+    color: #000;
+    }
+    .text-form textarea::placeholder{
+    color: #000;
+    }
+    .link{
+    color: #33b5b5;
+    }
+     .inactive{
+    color:#2c3e50 !important;
+    }
+
+</style>
+
+    <div class="userPosts">
+        <div class="layout-content">
+            <div class="layout-content-body">
+
+                <div class="title-bar">
+                    <h4>
+                      <ul class="breadcrumb">
+                        <li><i class="fa fa-home "></i><a class ="inactive" href="/admin/panel/home/"> Home</a></li>
+                          <li ><a class="inactive" href="/admin/panel/post_management">Post Management</a></li>
+                          <li ><a class="inactive" href="/admin/panel/user_posts/{{post.created_by.id}}">View Post</a></li>
+                          <li class="active">{{post.get_post_type_display}} Post detail</li>
+                      </ul>
+                    </h4>
+                </div>
+                <div class="row gutter-xs">
+                    <div class="col-xs-12">
+                        <div class="card">
+
+                            <div class="card-body text-form">
+                               <form class="form form-horizontal">
+                                    <div class="col-md-offset-3 col-md-6">
+                                      <div class="form-group">
+                                      <label for="" class="control-label">
+                                      About</label>
+                                      <textarea class="form-control" name="about" rows="3" readonly="True" placeholder="">{{post.about}}</textarea>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="" class="control-label">
+                                      Description</label>
+                                      <textarea class="form-control" name="about" rows="3" readonly="True" placeholder="">{{post.description}}</textarea>
+                                    </div>
+
+                                        {% for video in medias %}
+                                    <div class="form-group">
+                                     <video controls="" class="imagefile" width="100%" height="100%">
+                                        <source src="{{video.file.url}}" type="video/mp4">
+                                      </video>
+                                    </div>
+                                        {% endfor %}
+
+                                    <div class="form-group">
+                                        <label class="custom-control custom-control-primary custom-checkbox">
+                                    {% if post.is_18_plus %}
+                                      <input class="custom-control-input" type="checkbox"  name="mode" onclick="return false;" checked="checked">
+                                     {% else %}
+                                   <input class="custom-control-input" type="checkbox"  name="mode">
+                                    {% endif %}
+                                      <span class="custom-control-indicator"></span>
+                                      <span class="custom-control-label">Allowed for 18+</span>
+                                    </label>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-md-4">
+                                      <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-eye"></i> {{post.total_views}}</a>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-comment"></i> {{post.total_comments}}</a>
+                                      </div>
+                                      </div>
+                                      <div class="col-md-4">
+                                        <div class="view-icon text-center">
+                                        <a href=""><i class="fa fa-glass"></i> {{post.total_shares}}</a>
+                                      </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                               </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% include 'admin_panel/footer.html' %}

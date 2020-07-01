@@ -1,0 +1,301 @@
+<style>
+    .textarea
+    {
+    display: block;
+    width: 100%;
+    height: 100px;
+    padding: 6px 12px;
+    font-size: 13px;
+    line-height: 1.538462;
+    color: #2c3e50;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #cad6e2;
+    border-radius: 0;
+    }
+    .tbl
+    {
+        width:100%;
+        text-align:center;
+    }
+    .tbl tr th
+    {
+        color:#fff;
+        background:#333;
+        padding:10px;
+        text-align:center;
+    }
+    .tbl tr td
+    {
+
+        padding:10px;
+    }
+     .tbl tr th,td
+    {
+        border:1px solid #f7f7f7;
+    }
+    .icon-size
+    {
+        color:green;
+        font-size: 38px !important;
+    }
+</style>
+{% load staticfiles %}
+
+{% include 'admin_panel/header.html' %}
+
+
+<div class="notificationListPage"></div>
+<div class="layout-content">
+    <div class="layout-content-body">
+        <div class="title-bar">
+            <h4>
+                 <ul class="breadcrumb">
+                        <li><i class="fa fa-home "></i><a class ="inactive" href="/admin/panel/home/"> Home</a></li>
+                          <li ><a class="inactive" href="/admin/panel/notification_list">Notification Management</a></li>
+                     <li ><a class="inactive" href="/admin/panel/notification/">Send Notification</a></li>
+                 </ul>
+            </h4>
+            <a class="btn btn-primary" href="/admin/panel/notification_list/">
+                <span><i class="fa fa-chevron-left" aria-hidden="true"></i></span> &nbsp; Back to Notifications</a>
+        </div>
+        <div class="row gutter-xs">
+            <div class="col-md-12 card panel-body" style="box-shadow: 0px 0px 14px #999;">
+                <div class="col-sm-12 col-md-8">
+                    <div class="demo-form-wrapper">
+
+
+                {% if form.errors %}
+                  {% for field in form %}
+                      {% for error in field.errors %}
+                          <p style="color:red;text-align: center; margin:0px" >
+                              <span id="error_msg1">{{ error|escape }}</span>
+                          </p>
+                      {% endfor %}
+                  {% endfor %}
+
+                  {% for error in form.non_field_errors %}
+                     <p style="color:red;text-align: center; margin:0px">
+                          <span id="error_msg2">{{ error|escape }}</span>
+                      </p>
+                  {% endfor %}
+
+                 {% endif %}
+
+                  {% if messages %}
+                  {% for message in messages %}
+                    <p style="color:green;text-align: center;" id="error_msg3">{{message}}</p>
+                    {% endfor %}
+                    {% endif %}
+
+
+                        <form class="form form-horizontal" action="/admin/panel/notification/" method="POST" enctype='multipart/form-data'>{% csrf_token%}
+
+                            <div class="form-group">
+                             <div class="col-md-12">
+                              <label class=" control-label">Notification Title</label>
+                              <input id="" class="form-control" name="title" value="" type="text" required>
+                             </div>
+                             <div class="col-md-12">
+                              <label class=" control-label">Description</label><br>
+                              <textarea required rows="8" cols="10" class="textarea" name="message" placeholder="message..."></textarea>
+                             </div>
+                            </div>
+                            <div class="selectedUsersList"></div>
+
+
+                            <div class="form-group">
+                            <label class="col-sm-3 col-md-4 control-label">Select Users to send Notification</label>
+                            <div class="col-sm-9 col-md-8" style="padding-top:1%;">
+
+
+                                <label class="custom-control custom-control-primary custom-radio">
+                                  <input class="custom-control-input selectAllUser" type="radio" name="selectIsAllUser" value="True" checked>
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-label">To All Users</span>
+                                </label>
+
+                                <label class="custom-control custom-control-primary custom-radio">
+                                  <input class="custom-control-input selectUser" type="radio" name="selectIsAllUser" value="False">
+                                  <span class="custom-control-indicator"></span>
+                                  <span class="custom-control-label">To Selected Users</span>
+                                </label>
+
+
+                                <div id="showSelectedButton" class="col-sm-12 col-md-12" style="display:none; margin-top:2%; text-align:center;">
+                                    <input type="button" id="btn" value="select user" class="btn btn-primary" data-toggle="modal" data-target="#adduser" >
+                                </div>
+
+
+                              </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-12 col-md-12" style="text-align:center;margin-top:25px">
+                                    <input type="submit" value="Send Notification" class="btn btn-primary" />
+<!--                                    <button class="btn btn-primary" data-toggle="modal" data-target="#sent">Send Notification</button>-->
+                                </div>
+                            </div>
+                        </form>
+<!--                        {% if messages %}-->
+<!--                        <ul class="messages">-->
+<!--                            {% for message in messages %}-->
+<!--                            <p  {% if message.tags %} style="color:green; font-size: 20px; text-align: center;" class="{{ message.tags }}"{% endif %} >{{ message }}-->
+<!--                            </p>-->
+<!--                            {% endfor %}-->
+<!--                        </ul>-->
+<!--                        {% endif %}-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% include 'admin_panel/footer.html' %}
+
+
+<div id="adduser" tabindex="-1" role="dialog" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">Select Users</h4>
+          </div>
+          <div class="modal-body">
+
+            <table id="demo-datatables-2" class="table table-striped table-bordered table-nowrap dataTable" cellspacing="0" width="100%" >
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Email ID</th>
+                      <th>Mobile</th>
+                  </tr>
+              </thead>
+
+              <tbody id="appusers">
+
+
+                {% for user in users%}
+
+                   <tr>
+                      <td>
+                        <label class="custom-control custom-control-primary custom-checkbox">
+
+                          <input class="custom-control-input selectedUsers" value={{user.id}} data-id="{{user.id}}" type="checkbox" name="selectedUsers">
+
+                          <span class="custom-control-indicator"></span>
+                          <span class="custom-control-label"></span>
+                        </label>
+                      </td>
+                      <td>{{user.first_name}}</td>
+                      <td>{{user.email}}</td>
+                      <td>{{user.mobile_number}}</td>
+                  </tr>
+
+                {% endfor %}
+              </tbody>
+
+          </table>
+
+            <button class="btn btn-primary" id="slect" class="close" data-dismiss="modal">
+              Ok</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<div id="sent" tabindex="-1" role="dialog" class="modal fade">
+     <div class="modal-dialog  modal-sm">
+        <div class="modal-content">
+
+          <div class="modal-body">
+            <div class="text-center">
+              <p>{{message}}</p>
+              <i class="fa fa-check-circle icon-size"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+<script type="text/javascript">
+
+        $(document).ready(function(){
+
+          $(".selectUser").click(function () {
+                $("#showSelectedButton").show();
+           });
+           $(".selectAllUser").click(function () {
+                $("#showSelectedButton").hide();
+           });
+
+
+            var selectdUser = [];
+         $(document).on('click','.selectedUsers',function(){
+              var user_id = $(this).attr('value');
+               console.log(user_id)
+                if (this.checked) {
+                selectdUser.push($(this).val());
+                    $('.selectedUsersList').append(`<input type="hidden" id=`+user_id+` value=`+user_id+` name="selectedUserIds">`);
+                }else{
+                  console.log(user_id)
+                  selectdUser.splice( $.inArray($(this).val(), selectdUser), 1 );
+                  $("#"+user_id).remove();
+                }
+             });
+
+        $('#slect').on('click', function() {
+            console.log(selectdUser)
+         $('.selectedUsersList').append(`<input type="hidden" id='dataarr' value=`+selectdUser+` name="selectdUserArr">`);
+        });
+
+       $("#logo-file").change(function(e){
+        var img = e.target.files[0];
+        if(!iEdit.open(img, true, function(res){
+         $("#result1").attr("src", res);
+        })){
+          alert("Whoops! That is not an image!");
+        }
+       });
+
+       $(document).on("click",".add-facility .plus-btn",function() {
+        $('.add-facility .facility-box').append('\
+           <div class="col-md-6">\
+            <input id="" class="form-control" type="date">\
+            <span class="del">x</span>\
+           </div>');
+          $(".add-facility .del").on('click',function(){
+            $(this).parent('.col-md-6').remove();
+          });
+      });
+
+       $("#coverlogo-file").change(function(e){
+        var img = e.target.files[0];
+        if(!iEdit.open(img, true, function(res){
+         $("#result2").attr("src", res);
+        })){
+          alert("Whoops! That is not an image!");
+        }
+       });
+
+       $(document).on("click",".add-facility .plus-btn",function() {
+        $('.add-facility .facility-box').append('\
+           <div class="col-md-6">\
+            <input id="" class="form-control" type="date">\
+            <span class="del">x</span>\
+           </div>');
+          $(".add-facility .del").on('click',function(){
+            $(this).parent('.col-md-6').remove();
+          });
+      });
+      });
+    </script>

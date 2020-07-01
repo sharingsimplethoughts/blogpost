@@ -1,0 +1,265 @@
+{% load staticfiles %}
+
+{% include 'admin_panel/header.html' %}
+
+
+
+<style type="text/css">
+  .view-details{
+    margin: 25px 0;
+  }
+  .view-details p{
+    text-align: justify;
+    background: #f0f2f4;
+    padding: 10px;
+    border-radius: 7px;
+    margin: 15px 0;
+  }
+  .view-media{
+    margin: 25px 0;
+  }
+  .view-media h5{
+    padding-bottom: 7px;
+  }
+  .view-media ul{
+    text-align: center;
+    padding: 0;
+    list-style: none;
+  }
+  .view-media ul li{
+    display: inline;
+    margin: 5px;
+  }
+  .view-media ul li img{
+    width: 117px;
+    height: 117px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 4px #a6a6a6;
+    margin: 10px 0;
+  }
+  .view-videos h5{
+    padding-bottom: 7px;
+  }
+  .view-videos{
+    margin: 25px 0;
+  }
+  .view-videos ul{
+    text-align: center;
+    padding: 0;
+    list-style: none;
+  }
+  .view-videos ul li{
+    display: inline;
+    margin: 5px;
+  }
+  .view-videos ul li video{
+    width: 248px;
+    height: 200px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 4px #a6a6a6;
+  }
+  .timer{
+    margin: 30px 0;
+    text-align: center;
+  }
+  .timer p{
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+    .view-details{
+    margin: 25px 0;
+  }
+  .view-details p{
+    text-align: justify;
+    background: #f0f2f4;
+    padding: 10px;
+    border-radius: 7px;
+    margin: 15px 0;
+  }
+  .image-option{
+    max-width: 400px;
+    margin: auto;
+  }
+  .image-option ul{
+    padding: 0;
+    list-style: none;
+  }
+  .image-option ul li{
+   margin: 10px 0;
+   display: flex;
+   background: #f0f2f4;
+   border-radius: 8px;
+  }
+  .image-option ul li p{
+   width: 100%;
+   text-align: center;
+    line-height: 35px;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+  .image-option ul li button{
+   background: transparent;
+   border: none;
+   font-size: 22px;
+  }
+
+</style>
+<div class="profilePage"></div>
+<div class="layout-content">
+    <div class="layout-content-body">
+        <div class="title-bar">
+                    <h4>
+                      <ul class="breadcrumb">
+                        <li><i class="fa fa-home "></i><a class ="inactive" href="/admin/panel/home/"> Home</a></li>
+                          <li ><a class="inactive" href="/admin/panel/post_management">Post Management</a></li>
+                          <li ><a class="inactive" href="/admin/panel/user_posts/{{post.created_by.id}}">View Post</a></li>
+                          <li class="active">{{post.get_post_type_display}} Post detail</li>
+                      </ul>
+                    </h4>
+                </div>
+        <div class="gutter-xs">
+            <div class="card panel-body" style="box-shadow: 0px 0px 14px #999;">
+              <div class="row">
+                <div class="col-sm-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="view-details">
+                      <h5>About</h5>
+                      <p>{{post.about}}</p>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="view-details">
+                      <h5>Description</h5>
+                        <p>{{post.description}}</p>
+                    </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="view-details">
+                      <h5>Question</h5>
+                        <p>{{poll_post.ques}}</p>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="view-details">
+                      <h5>Created Date</h5>
+                        <p>{{post.created | date:"M d, Y"}}</p>
+                    </div>
+                </div>
+
+            {%  if poll_post.option_type == "1" %}
+
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="view-media">
+                      <h5 class="text-center">Poll Options</h5>
+                      <ul>
+                          {% for option in options %}
+                        <li><img src="{{option.image_option.url}}"/></li>
+                            {% endfor %}
+
+                      </ul>
+                    </div>
+
+            {% else %}
+
+               <div class="row">
+                <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="image-option">
+                      <h5 class="text-center">Poll Options</h5>
+                      <ul>
+                          {% for option in options %}
+<!--                          <i class="fa fa-image"></i>-->
+                        <li><p>{{option.text_option}}</p><button></button></li>
+                          {% endfor %}
+                      </ul>
+                    </div>
+                </div>
+              </div>
+
+            {% endif %}
+
+               <div class="row"></div>
+                <div class="col-sm-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="timer">
+                    <p id="demo"></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="view-media text-center">
+                     <div class="form-group" >
+                        <label class="custom-control custom-control-primary custom-checkbox">
+                            {% if post.is_18_plus %}
+                              <input class="custom-control-input" type="checkbox"  name="mode" onclick="return false;" checked="checked">
+                             {% else %}
+                           <input class="custom-control-input" type="checkbox"  name="mode">
+                            {% endif %}
+                         <span class="custom-control-indicator"></span>
+                        <span class="custom-control-label">Allowed for 18+</span>
+                    </label>
+                </div>
+                    </div>
+
+
+                  <div class="row">
+                  <div class="col-md-4">
+                  <div class="view-icon text-center">
+                    <span href=""><i class="fa fa-eye"></i> {{post.total_views}}</span>
+                  </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="view-icon text-center">
+                    <span href=""><i class="fa fa-comment"></i> {{post.total_comments}}</span>
+                  </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="view-icon text-center">
+                    <span href=""><i class="fa fa-glass"></i> {{post.total_shares}}</span>
+                  </div>
+                  </div>
+               </div>
+              </div>
+              </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% include 'admin_panel/footer.html' %}
+ <script>
+// Set the date we're counting down to
+var countDownDate = new Date("{{poll_post.poll_end_date | date:"M d, Y H:i:s"}}").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+
+  // Time calculations for days, hours, minutes and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Output the result in an element with id="demo"
+  document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+  + minutes + "m " + seconds + "s ";
+
+  // If the count down is over, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("demo").innerHTML = "POLL END";
+  }
+}, 1000);
+</script>
